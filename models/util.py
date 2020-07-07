@@ -31,19 +31,24 @@ def sent2features(sent):
 # ******** LSTM模型 工具函数*************
 
 def tensorized(batch, maps):
+    # print("batch",batch)
+    # print("maps:", maps)
     PAD = maps.get('<pad>')
     UNK = maps.get('<unk>')
-
-    max_len = len(batch[0])
+    # print("pad:", PAD)
+    # print("unk", UNK)
+    max_len = max([len(i) for i in batch])
     batch_size = len(batch)
-
+    # print("max_len", max_len)
+    # print("batch_size", batch_size)
     batch_tensor = torch.ones(batch_size, max_len).long() * PAD
     for i, l in enumerate(batch):
         for j, e in enumerate(l):
+            # print(j,e)
             batch_tensor[i][j] = maps.get(e, UNK)
     # batch各个元素的长度
     lengths = [len(l) for l in batch]
-
+    # print("ok")
     return batch_tensor, lengths
 
 
