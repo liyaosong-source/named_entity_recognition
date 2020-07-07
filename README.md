@@ -1,26 +1,22 @@
 # 中文命名实体识别
 
-
-
 ## 数据集
 
-本项目尝试使用了多种不同的模型（包括HMM，CRF，Bi-LSTM，Bi-LSTM+CRF）来解决中文命名实体识别问题，数据集用的是论文ACL 2018[Chinese NER using Lattice LSTM](https://github.com/jiesutd/LatticeLSTM)中收集的简历数据，数据的格式如下，它的每一行由一个字及其对应的标注组成，标注集采用BIOES，句子之间用一个空行隔开。
-
+本项目尝试使用了多种不同的模型（包括HMM，CRF，Bi-LSTM，Bi-LSTM+CRF）来解决中文命名实体识别问题，数据的格式如下:
+train.txt
 ```
-美	B-LOC
-国	E-LOC
-的	O
-华	B-PER
-莱	I-PER
-士	E-PER
+我 们 的 藏 品 中 有 几 十 册 为 北 京 图 书 馆 等 国 家 级 藏 馆 所 未 藏 。
+由 于 这 一 时 期 战 争 频 繁 ， 条 件 艰 苦 ， 又 遭 国 民 党 毁 禁 ， 传 世 量 稀 少 ， 购 藏 不 易 。
+尤 以 收 录 周 恩 来 总 理 、 马 骏 烈 士 的 《 南 开 中 学 同 学 录 》 （ 1 9 1 9 年 ） 、 李 大 钊 烈 士 遗 篇 孤 本 《 中 国 大 学 学 术 演 讲 录 》 （ 1 9 2 3 年 ） 、 黄 埔 军 校 政 治 宣 传 教 材 （ 1 9 2 7 年 ） 、 恽 代 英 烈 士 译 著 《 阶 级 争 斗 》 （ 1 9 2 6 年 ） 、 党 中 央 机 关 月 刊 《 共 产 国 际 》 （ 1 9 3 0 年 ） 等 为 收 藏 界 所 称 道 。
+在 我 们 的 专 题 藏 品 中 ， 有 一 类 是 建 国 前 各 解 放 区 出 版 物 和 国 统 区 查 禁 书 刊 及 敌 占 区 各 类 地 下 革 命 出 版 物 。
+```
+train-lable.txt
+```
+O O O O O O O O O O O B-LOC I-LOC I-LOC I-LOC I-LOC O O O O O O O O O O
+O O O O O O O O O O O O O O O O O O B-ORG I-ORG I-ORG O O O O O O O O O O O O O O
+O O O O B-PER I-PER I-PER O O O B-PER I-PER O O O O B-ORG I-ORG I-ORG I-ORG O O O O O O O O O O O O B-PER I-PER I-PER O O O O O O O B-LOC I-LOC O O O O O O O O O O O O O O O O B-ORG I-ORG I-ORG I-ORG O O O O O O O O O O O O O O B-PER I-PER I-PER O O O O O O O O O O O O O O O O O O B-ORG I-ORG I-ORG O O O O O B-ORG I-ORG I-ORG I-ORG O O O O O O O O O O O O O O O O O
+O O O O O O O O O O O O O O O O O O O O O O O O O B-ORG O O O O O O O O O O O O O O O O O O O O
 
-我	O
-跟	O
-他	O
-谈	O
-笑	O
-风	O
-生	O 
 ```
 
 该数据集就位于项目目录下的`ResumeNER`文件夹里。
@@ -28,12 +24,16 @@
 ## 运行结果
 
 下面是四种不同的模型以及这Ensemble这四个模型预测结果的准确率（取最好）：
-
-|      | HMM    | CRF    | BiLSTM | BiLSTM+CRF | Ensemble |
-| ---- | ------ | ------ | ------ | ---------- | -------- |
-| 召回率  | 91.22% | 95.43% | 95.32% | 95.72%     | 95.65%   |
-| 准确率  | 91.49% | 95.43% | 95.37% | 95.74%     | 95.69%   |
-| F1分数 | 91.30% | 95.42% | 95.32% | 95.70%     | 95.64%   |
+Ensemble 四个模型的结果如下：
+           precision    recall  f1-score   support
+    I-PER     0.9694    0.8946    0.9305       389
+    B-LOC     0.9143    0.7671    0.8343       292
+    I-ORG     0.9201    0.7905    0.8504       845
+    B-ORG     0.8947    0.7391    0.8095       207
+        O     0.9751    0.9963    0.9856     14126
+    B-PER     0.9788    0.9204    0.9487       201
+    I-LOC     0.8804    0.7359    0.8017       390
+avg/total     0.9678    0.9689    0.9676     16450
 
 最后一列Ensemble是将这四个模型的预测结果结合起来，使用“投票表决”的方法得出最后的预测结果。
 
@@ -42,6 +42,14 @@
 具体的输出可以查看`output.txt`文件。
 
 
+
+## 自己完成的代码（原基础上修改）：
+
+data.py
+
+main.py (训练)
+
+test.py (测试)
 
 ## 快速开始
 
@@ -64,8 +72,6 @@ python3 main.py
 ```shell
 python3 test.py
 ```
-
-下面是这些模型的简单介绍（github网页对数学公式的支持不太好，涉及公式的部分无法正常显示，[我的博客](https://zhuanlan.zhihu.com/p/61227299)  有对这些模型以及代码更加详细的介绍）：
 
 
 
@@ -170,21 +176,3 @@ LSTM的优点是能够通过双向的设置学习到观测序列（输入的字�
   - 数据集太小，不足够让模型学习到转移矩阵（后续尝试在更大的数据集上测试一下结果）
 * 尝试更加复杂的模型，参考论文[Chinese NER using Lattice LSTM](https://github.com/jiesutd/LatticeLSTM)
 * 更详细的评估结果：打印混淆矩阵，同时输出每种类别的召回率、准确率、F1指标，便于分析。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
