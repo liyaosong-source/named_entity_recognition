@@ -52,6 +52,8 @@ main.py (训练)
 
 test.py (测试)
 
+model/util.py
+
 ## 快速开始
 
 首先安装依赖项：
