@@ -24,6 +24,7 @@ O O O O O O O O O O O O O O O O O O O O O O O O O B-ORG O O O O O O O O O O O O 
 ## 运行结果
 
 下面是四种不同的模型以及这Ensemble这四个模型预测结果的准确率（取最好）：
+```
 Ensemble 四个模型的结果如下：
            precision    recall  f1-score   support
     I-PER     0.9694    0.8946    0.9305       389
@@ -34,7 +35,7 @@ Ensemble 四个模型的结果如下：
     B-PER     0.9788    0.9204    0.9487       201
     I-LOC     0.8804    0.7359    0.8017       390
 avg/total     0.9678    0.9689    0.9676     16450
-
+```
 最后一列Ensemble是将这四个模型的预测结果结合起来，使用“投票表决”的方法得出最后的预测结果。
 
 （Ensemble的三个指标均不如BiLSTM+CRF，可以认为在Ensemble过程中，是其他三个模型拖累了BiLSTM+CRF）
