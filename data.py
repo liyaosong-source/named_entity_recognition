@@ -1,6 +1,28 @@
 from os.path import join
 from codecs import open
 
+#自己完成的
+def build_c(split, make_vocab=True, data_dir="./ResumeNER"):
+    assert split in ['train', 'dev', 'test']
+
+    with open(join(data_dir, split + ".txt"), 'r', encoding="utf8") as f1:
+        f1 = f1.readlines()
+    with open(join(data_dir, split + "-lable.txt"), 'r', encoding="utf8") as f2:
+        f2 = f2.readlines()
+    word_lists = [i.strip('\n').split(' ') for i in f1]
+    tag_lists = [j.strip('\n').split(' ') for j in f2]
+
+    for n in range(len(word_lists)):
+        if '' in word_lists[n]:
+            word_lists[n].remove("")
+
+    if make_vocab:
+        word2id = build_map(word_lists)
+        tag2id = build_map(tag_lists)
+        return word_lists, tag_lists, word2id, tag2id
+    else:
+        return word_lists, tag_lists
+
 
 def build_corpus(split, make_vocab=True, data_dir="./ResumeNER"):
     """读取数据"""
@@ -8,7 +30,7 @@ def build_corpus(split, make_vocab=True, data_dir="./ResumeNER"):
 
     word_lists = []
     tag_lists = []
-    with open(join(data_dir, split+".char.bmes"), 'r', encoding='utf-8') as f:
+    with open(join(data_dir, split + ".char.bmes"), 'r', encoding='utf-8') as f:
         word_list = []
         tag_list = []
         for line in f:
